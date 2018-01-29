@@ -1,0 +1,20 @@
+connections:
+  mysql:
+    test:
+      host: "10.10.92.222"
+      port: 3306
+      username: "root"
+      password: "mjpw_3202"
+      database: "test"
+  redis:
+    test:
+      host: "10.10.92.222"
+      port: 6379
+      username: "root"
+      password: "mjpw_3202"
+      db: 0
+  mongodb:
+    test:
+      uri: "mongodb://writer:miaoji1109@10.10.92.222:27017/mioji_chat"
+params:
+  test_params: "test_params"
