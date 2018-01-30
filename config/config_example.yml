@@ -1,20 +1,20 @@
 connections:
   mysql:
-    test:
-      host: "10.10.92.222"
+    mioji_label:
+      host: ""
       port: 3306
-      username: "root"
-      password: "mjpw_3202"
-      database: "test"
+      username: ""
+      password: ""
+      database: ""
   redis:
     test:
-      host: "10.10.92.222"
+      host: ""
       port: 6379
-      username: "root"
-      password: "mjpw_3202"
+      username: ""
+      password: ""
       db: 0
   mongodb:
-    test:
-      uri: "mongodb://writer:miaoji1109@10.10.92.222:27017/mioji_chat"
+    test1:
+      uri: "mongodb://user:pass@ip:port/db"
 params:
   test_params: "test_params"
