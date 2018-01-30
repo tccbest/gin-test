@@ -14,13 +14,13 @@ type SectionParams struct {
 }
 
 type SectionConnections struct {
-    MySQL SectionMySQL `yaml:"mysql"`
-    Redis SectionRedis `yaml:"redis"`
+    MySQL   SectionMySQL   `yaml:"mysql"`
+    Redis   SectionRedis   `yaml:"redis"`
     Mongodb SectionMongodb `yaml:"mongodb"`
 }
 
 type SectionMySQL struct {
-    Test SectionTest `yaml:"test"`
+    MiojiLabel SectionMySQLConf `yaml:"mioji_label"`
 }
 
 type SectionRedis struct {
@@ -28,7 +28,15 @@ type SectionRedis struct {
 }
 
 type SectionMongodb struct {
-    Test SectionTest `yaml:"test"`
+    Test1 SectionTest1 `yaml:"test"`
+}
+
+type SectionMySQLConf struct {
+    Host     string `yaml:"host"`
+    Port     string `yaml:"port"`
+    Username string `yaml:"username"`
+    Password string `yaml:"password"`
+    Database string `yaml:"database"`
 }
 
 type SectionTest struct {
@@ -39,7 +47,11 @@ type SectionTest struct {
     Database string `yaml:"database"`
 }
 
-func LoadConf() {
+type SectionTest1 struct {
+    Uri string `yaml:"uri"`
+}
+
+func LoadConf() *Config {
     m := multiconfig.NewWithPath("config/config.yml")
 
     serverConf := new(Config)
@@ -49,4 +61,6 @@ func LoadConf() {
     }
 
     m.MustLoad(serverConf)
+
+    return serverConf
 }

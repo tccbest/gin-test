@@ -2,7 +2,8 @@ package main
 
 import (
     "github.com/gin-gonic/gin"
-    "gin/config"
+    "gin/model"
+    _ "gin/connections"
 )
 
 var DB = make(map[string]string)
@@ -15,6 +16,11 @@ func setupRouter() *gin.Engine {
     // Ping test
     r.GET("/ping", func(c *gin.Context) {
         c.String(200, "pong")
+    })
+
+    // Ping test
+    r.GET("/users", func(c *gin.Context) {
+        c.JSON(200, model.GetUsers())
     })
 
     // Get user value
@@ -58,8 +64,6 @@ func setupRouter() *gin.Engine {
 }
 
 func main() {
-    config.LoadConf()
-
     r := setupRouter()
     // Listen and Server in 0.0.0.0:8080
     r.Run(":8080")
