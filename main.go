@@ -4,6 +4,7 @@ import (
     "github.com/gin-gonic/gin"
     "gin/model"
     _ "gin/connections"
+    "strconv"
 )
 
 var DB = make(map[string]string)
@@ -20,19 +21,37 @@ func setupRouter() *gin.Engine {
 
     // Ping test
     r.GET("/users", func(c *gin.Context) {
-        c.JSON(200, model.GetUsers())
+        users, err := model.GetAllUsers()
+        if err != nil {
+            c.JSON(200, gin.H{"A": "B"})
+            return
+        }
+
+        c.JSON(200, users)
+    })
+
+    r.GET("/user/:id", func(c *gin.Context) {
+        id, _ := strconv.Atoi(c.Params.ByName("id"))
+
+        user, err := model.GetUser(id)
+        if err != nil {
+            c.JSON(200, gin.H{"A": "B"})
+            return
+        }
+
+        c.JSON(200, user)
     })
 
     // Get user value
-    r.GET("/user/:name", func(c *gin.Context) {
-        user := c.Params.ByName("name")
-        value, ok := DB[user]
-        if ok {
-            c.JSON(200, gin.H{"user": user, "value": value})
-        } else {
-            c.JSON(200, gin.H{"user": user, "status": "no value"})
-        }
-    })
+    //r.GET("/user/:name", func(c *gin.Context) {
+    //    user := c.Params.ByName("name")
+    //    value, ok := DB[user]
+    //    if ok {
+    //        c.JSON(200, gin.H{"user": user, "value": value})
+    //    } else {
+    //        c.JSON(200, gin.H{"user": user, "status": "no value"})
+    //    }
+    //})
 
     // Authorized group (uses gin.BasicAuth() middleware)
     // Same than:
