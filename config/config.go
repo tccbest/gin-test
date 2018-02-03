@@ -20,7 +20,8 @@ type SectionConnections struct {
 }
 
 type SectionMySQL struct {
-    MiojiLabel SectionMySQLConf `yaml:"mioji_label"`
+    MiojiLabel      SectionMySQLConf `yaml:"mioji_label"`
+    MiojiChatPublic SectionMySQLConf `yaml:"mioji_chat_public"`
 }
 
 type SectionRedis struct {

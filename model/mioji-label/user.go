@@ -1,4 +1,4 @@
-package model
+package mioji_label
 
 import (
     "gin/connections"
@@ -13,12 +13,12 @@ type User struct {
     Account      string `json:"account"`
     Password     string `json:"-"`
     RoleId       int    `json:"roleId"`
-    LabelTarget  int    `json:"labelTarget"`
-    ReviewTarget int    `json:"reviewTarget"`
+    LabelTarget  int    `json:"label_target"`
+    ReviewTarget int    `json:"review_target"`
     Ctime        int    `json:"ctime"`
     Utime        string `json:"utime"`
     Disable      int    `json:"disable"`
-    DisableTs    int    `json:"disableTs"`
+    DisableTs    int    `json:"disable_ts"`
 }
 
 //获取所有用户数据

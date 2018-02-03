@@ -17,6 +17,8 @@ func init() {
     //mioji_label
     conn(conf.MiojiLabel, "mioji_label")
 
+    //mioji_chat_public
+    conn(conf.MiojiChatPublic, "mioji_chat_public")
 }
 
 func conn(conf config.SectionMySQLConf, confName string) {
@@ -32,9 +34,9 @@ func conn(conf config.SectionMySQLConf, confName string) {
     var err error
     MySQLConn[confName], err = gorm.Open("mysql", dsn)
     if err == nil {
-        MySQLConn[confName].DB().SetMaxIdleConns(20)
-        MySQLConn[confName].DB().SetMaxOpenConns(20)
-        MySQLConn[confName].DB().SetConnMaxLifetime(time.Second * 14400)
+        MySQLConn[confName].DB().SetMaxIdleConns(10)
+        MySQLConn[confName].DB().SetMaxOpenConns(10)
+        MySQLConn[confName].DB().SetConnMaxLifetime(time.Minute)
         MySQLConn[confName].DB().Ping()
         MySQLConn[confName].LogMode(true)
     } else {
