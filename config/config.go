@@ -22,10 +22,13 @@ type SectionConnections struct {
 type SectionMySQL struct {
     MiojiLabel      SectionMySQLConf `yaml:"mioji_label"`
     MiojiChatPublic SectionMySQLConf `yaml:"mioji_chat_public"`
+    BaseData        SectionMySQLConf `yaml:"base_data"`
+    Store           SectionMySQLConf `yaml:"store"`
 }
 
 type SectionRedis struct {
-    Test SectionTest `yaml:"test"`
+    Test          SectionTest      `yaml:"test"`
+    BaseDataCache SectionRedisConf `yaml:"base_data_cache"`
 }
 
 type SectionMongodb struct {
@@ -38,6 +41,13 @@ type SectionMySQLConf struct {
     Username string `yaml:"username"`
     Password string `yaml:"password"`
     Database string `yaml:"database"`
+}
+
+type SectionRedisConf struct {
+    Host     string `yaml:"host"`
+    Password string `yaml:"password"`
+    Db       int    `yaml:"db"`
+    PoolSize int    `yaml:"pool_size"`
 }
 
 type SectionTest struct {

@@ -2,26 +2,46 @@ package main
 
 import (
     "github.com/gin-gonic/gin"
-    "gin/model"
     _ "gin/connections"
     "strconv"
+    "gin/models/mioji-label"
+    "gin/models/base-data"
+    "gin/api"
 )
 
 var DB = make(map[string]string)
 
-func setupRouter() *gin.Engine {
+func SetupRouter() *gin.Engine {
     // Disable Console Color
     // gin.DisableConsoleColor()
     r := gin.Default()
 
-    // Ping test
-    r.GET("/ping", func(c *gin.Context) {
-        c.String(200, "pong")
+    r.NoRoute(handle404)
+
+    r.GET("/", func(c *gin.Context) {
+        apiName := c.Query("type")
+
+        var result interface{}
+        switch apiName {
+        case "apitest":
+            result = api.ApiTest(c)
+        case "api00001":
+            result = api.Api00001(c)
+        default:
+            result = gin.H{"c": 0, "m": "不存在该接口", "d": gin.H{}}
+            return
+        }
+
+        c.JSON(200, result)
+    })
+
+    r.GET("/test", func(c *gin.Context) {
+        return
     })
 
     // Ping test
     r.GET("/users", func(c *gin.Context) {
-        users, err := model.GetAllUsers()
+        users, err := mioji_label.GetAllUsers()
         if err != nil {
             c.JSON(200, gin.H{"A": "B"})
             return
@@ -33,7 +53,7 @@ func setupRouter() *gin.Engine {
     r.GET("/user/:id", func(c *gin.Context) {
         id, _ := strconv.Atoi(c.Params.ByName("id"))
 
-        user, err := model.GetUser(id)
+        user, err := mioji_label.GetUser(id)
         if err != nil {
             c.JSON(200, gin.H{"A": "B"})
             return
@@ -42,16 +62,15 @@ func setupRouter() *gin.Engine {
         c.JSON(200, user)
     })
 
-    // Get user value
-    //r.GET("/user/:name", func(c *gin.Context) {
-    //    user := c.Params.ByName("name")
-    //    value, ok := DB[user]
-    //    if ok {
-    //        c.JSON(200, gin.H{"user": user, "value": value})
-    //    } else {
-    //        c.JSON(200, gin.H{"user": user, "status": "no value"})
-    //    }
-    //})
+    r.GET("/countries", func(c *gin.Context) {
+        countries, err := base_data.GetAllCountries()
+        if err != nil {
+            c.JSON(200, gin.H{"A": "B"})
+            return
+        }
+
+        c.JSON(200, countries)
+    })
 
     // Authorized group (uses gin.BasicAuth() middleware)
     // Same than:
@@ -82,8 +101,12 @@ func setupRouter() *gin.Engine {
     return r
 }
 
+func handle404(c *gin.Context) {
+    c.JSON(404, gin.H{"c": 404, "m": "路由错误", "d": gin.H{}})
+}
+
 func main() {
-    r := setupRouter()
+    r := SetupRouter()
     // Listen and Server in 0.0.0.0:8080
     r.Run(":8080")
 }

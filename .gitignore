@@ -1,2 +1,4 @@
 config/config.yml
 gin
+vendor/*
+!vendor/vendor.json

@@ -9,19 +9,25 @@ import (
     "time"
 )
 
-var MySQLConn = make(map[string]*gorm.DB)
+var MySQLClient = make(map[string]*gorm.DB)
 
 func init() {
     conf := config.LoadConf().Connections.MySQL
 
     //mioji_label
-    conn(conf.MiojiLabel, "mioji_label")
+    mysqlConnection(conf.MiojiLabel, "mioji_label")
 
     //mioji_chat_public
-    conn(conf.MiojiChatPublic, "mioji_chat_public")
+    mysqlConnection(conf.MiojiChatPublic, "mioji_chat_public")
+
+    //base_data
+    mysqlConnection(conf.BaseData, "base_data")
+
+    //store
+    mysqlConnection(conf.Store, "store")
 }
 
-func conn(conf config.SectionMySQLConf, confName string) {
+func mysqlConnection(conf config.SectionMySQLConf, confName string) {
     dsn := fmt.Sprintf(
         "%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
         conf.Username,
@@ -32,13 +38,13 @@ func conn(conf config.SectionMySQLConf, confName string) {
     )
 
     var err error
-    MySQLConn[confName], err = gorm.Open("mysql", dsn)
+    MySQLClient[confName], err = gorm.Open("mysql", dsn)
     if err == nil {
-        MySQLConn[confName].DB().SetMaxIdleConns(10)
-        MySQLConn[confName].DB().SetMaxOpenConns(10)
-        MySQLConn[confName].DB().SetConnMaxLifetime(time.Minute)
-        MySQLConn[confName].DB().Ping()
-        MySQLConn[confName].LogMode(true)
+        MySQLClient[confName].DB().SetMaxIdleConns(10)
+        MySQLClient[confName].DB().SetMaxOpenConns(10)
+        MySQLClient[confName].DB().SetConnMaxLifetime(time.Minute)
+        MySQLClient[confName].DB().Ping()
+        MySQLClient[confName].LogMode(true)
     } else {
         log.Panic(err)
     }
